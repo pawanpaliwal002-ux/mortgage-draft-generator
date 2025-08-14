@@ -1,0 +1,229 @@
+// Corrected JavaScript code
+const banks = {
+    'STATE BANK OF INDIA': 'Act No.XXIII of 1955',
+    'BK': 'Banking Regulation Act, 1949'
+};
+
+const bankNames = {
+    'STATE BANK OF INDIA, HOME LOAN CENTER': {
+        act: 'Act No.XXIII of 1955',
+        tanMicr: 'AAACS8577K'
+    },
+    'HDFC BANK LTD': {
+        act: 'The Banking Regulation Act, 1949',
+        tanMicr: 'AAAHC6826L'
+    },
+    'PUNJAB NATIONAL BANK': {
+        act: 'The Banking Regulation Act, 1949',
+        tanMicr: 'AAACP8533K'
+    },
+    'BANK OF BARODA': {
+        act: 'The Banking Regulation Act, 1949',
+        tanMicr: 'AAACB1234N'
+    },
+    'CANARA BANK': {
+        act: 'The Banking Regulation Act, 1949',
+        tanMicr: 'AAACC1234F'
+    },
+    'UNION BANK OF INDIA': {
+        act: 'The Banking Regulation Act, 1949',
+        tanMicr: 'AAACU1234A'
+    },
+    'ICICI BANK LTD': {
+        act: 'The Banking Regulation Act, 1949',
+        tanMicr: 'ICICI0000001'
+    }
+};
+
+function fillSampleData() {
+    const data = {
+        borrowerCount: '2',
+        name1: 'YOGESH DIGAMBAR ASAMWAR',
+        dob1: '05/01/1992',
+        profession1: 'SERVICE',
+        pan1: 'AYTPA3943R',
+        aadhaar1: '2325 1380 9238',
+        mobile1: '8329351362',
+        address1: 'NEAR SHIV TEMPLE AMRAVATI, MAHARASHTRA',
+        name2: 'SUNITA YOGESH ASAMWAR',
+        dob2: '15/08/1995',
+        profession2: 'HOMEMAKER',
+        pan2: 'BCTPA5678S',
+        aadhaar2: '3456 7890 1234',
+        mobile2: '9876543210',
+        address2: 'NEAR SHIV TEMPLE AMRAVATI, MAHARASHTRA',
+        bankName: 'STATE BANK OF INDIA, HOME LOAN CENTER',
+        bankAddress: '1ST FLOOR OPPOSITE TO MEHARA HOSPITAL JANTA COLLEGE SQUARE AMRAVATI MAHARASHTRA',
+        loanAmount: '1875000',
+        interestRate: '7.8%',
+        mortgageDate: '14/08/2025',
+        tanMicr: 'AAACS8577K',
+        plotNo: '25',
+        surveyNo: '125/2',
+        landArea: '1200 Sq. Ft.',
+        builtupArea: '800 Sq. Ft.',
+        mauje: 'AKOLI',
+        pragane: 'BADNERA',
+        taluka: 'AMRAVATI',
+        district: 'AMRAVATI',
+        pinCode: '444601',
+        boundaryNorth: 'North Boundary Example',
+        boundarySouth: 'South Boundary Example',
+        boundaryWest: 'West Boundary Example',
+        boundaryEast: 'East Boundary Example'
+    };
+
+    for (const key in data) {
+        const element = document.getElementById(key);
+        if (element) {
+            element.value = data[key];
+        }
+    }
+    updateBorrowerFields();
+    updateStatus('Sample data filled successfully!', 'info');
+}
+
+function clearAllFields() {
+    const inputs = document.querySelectorAll('.form-input');
+    inputs.forEach(input => {
+        input.value = '';
+    });
+    document.getElementById('borrowerCount').value = '1';
+    updateBorrowerFields();
+    updateStatus('All fields cleared.', 'info');
+}
+
+function updateBorrowerFields() {
+    const count = parseInt(document.getElementById('borrowerCount').value);
+    for (let i = 2; i <= 3; i++) {
+        const borrowerSection = document.getElementById('borrower' + i);
+        if (i <= count) {
+            borrowerSection.style.display = 'block';
+        } else {
+            borrowerSection.style.display = 'none';
+        }
+    }
+}
+
+function updateStatus(message, type) {
+    const statusMessage = document.getElementById('statusMessage');
+    statusMessage.textContent = message;
+    statusMessage.className = 'status-message';
+    statusMessage.classList.add(`status-${type}`);
+    statusMessage.classList.remove('hidden');
+    setTimeout(() => {
+        statusMessage.classList.add('hidden');
+    }, 5000);
+}
+
+function generateWordDocument() {
+    // Collect data from the form
+    const data = {
+        date: document.getElementById('mortgageDate').value || 'Date Not Provided',
+        bankName: document.getElementById('bankName').value || 'Bank Name Not Provided',
+        bankAddress: document.getElementById('bankAddress').value || 'Bank Address Not Provided',
+        loanAmount: document.getElementById('loanAmount').value || 'Loan Amount Not Provided',
+        loanAmountWords: convertToIndianCurrencyWords(document.getElementById('loanAmount').value) || 'Amount in words not available',
+        interestRate: document.getElementById('interestRate').value || 'Interest Rate Not Provided',
+        tanMicr: document.getElementById('tanMicr').value || 'TAN/MICR Not Provided',
+        plotNo: document.getElementById('plotNo').value || 'Plot No. Not Provided',
+        surveyNo: document.getElementById('surveyNo').value || 'Survey No. Not Provided',
+        landArea: document.getElementById('landArea').value || 'Land Area Not Provided',
+        builtupArea: document.getElementById('builtupArea').value || 'Built-up Area Not Provided',
+        mauje: document.getElementById('mauje').value || 'Mauje Not Provided',
+        pragane: document.getElementById('pragane').value || 'Pragane Not Provided',
+        taluka: document.getElementById('taluka').value || 'Taluka Not Provided',
+        district: document.getElementById('district').value || 'District Not Provided',
+        pinCode: document.getElementById('pinCode').value || 'PIN Code Not Provided',
+        boundaryNorth: document.getElementById('boundaryNorth').value || 'Boundary Not Provided',
+        boundarySouth: document.getElementById('boundarySouth').value || 'Boundary Not Provided',
+        boundaryWest: document.getElementById('boundaryWest').value || 'Boundary Not Provided',
+        boundaryEast: document.getElementById('boundaryEast').value || 'Boundary Not Provided',
+        borrowers: []
+    };
+
+    const borrowerCount = parseInt(document.getElementById('borrowerCount').value);
+    for (let i = 1; i <= borrowerCount; i++) {
+        data.borrowers.push({
+            name: document.getElementById('name' + i).value,
+            dob: document.getElementById('dob' + i).value,
+            profession: document.getElementById('profession' + i).value,
+            pan: document.getElementById('pan' + i).value,
+            aadhaar: document.getElementById('aadhaar' + i).value,
+            mobile: document.getElementById('mobile' + i).value,
+            address: document.getElementById('address' + i).value
+        });
+    }
+
+    // Generate content
+    const content = generateDocumentContent(data);
+
+    // Save as DOCX
+    generateAndDownloadDocx(content);
+}
+
+function generateMarathiDocument() {
+    // Generate content for Marathi
+    const data = {
+        date: document.getElementById('mortgageDate').value || 'तारीख उपलब्ध नाही',
+        bankName: document.getElementById('bankName').value || 'बँकेचे नाव उपलब्ध नाही',
+        bankAddress: document.getElementById('bankAddress').value || 'बँकेचा पत्ता उपलब्ध नाही',
+        loanAmount: document.getElementById('loanAmount').value || 'कर्जाची रक्कम उपलब्ध नाही',
+        loanAmountWords: convertToMarathiWords(document.getElementById('loanAmount').value) || 'अक्षरशः रक्कम उपलब्ध नाही',
+        interestRate: document.getElementById('interestRate').value || 'व्याज दर उपलब्ध नाही',
+        tanMicr: document.getElementById('tanMicr').value || 'TAN/MICR उपलब्ध नाही',
+        plotNo: document.getElementById('plotNo').value || 'प्लॉट नंबर उपलब्ध नाही',
+        surveyNo: document.getElementById('surveyNo').value || 'सर्वे नंबर उपलब्ध नाही',
+        landArea: document.getElementById('landArea').value || 'क्षेत्रफळ उपलब्ध नाही',
+        builtupArea: document.getElementById('builtupArea').value || 'बांधकाम क्षेत्र उपलब्ध नाही',
+        mauje: document.getElementById('mauje').value || 'मौजे उपलब्ध नाही',
+        pragane: document.getElementById('pragane').value || 'परगणा उपलब्ध नाही',
+        taluka: document.getElementById('taluka').value || 'तालुका उपलब्ध नाही',
+        district: document.getElementById('district').value || 'जिल्हा उपलब्ध नाही',
+        pinCode: document.getElementById('pinCode').value || 'पिन कोड उपलब्ध नाही',
+        boundaryNorth: document.getElementById('boundaryNorth').value || 'उत्तर सीमा उपलब्ध नाही',
+        boundarySouth: document.getElementById('boundarySouth').value || 'दक्षिण सीमा उपलब्ध नाही',
+        boundaryWest: document.getElementById('boundaryWest').value || 'पश्चिम सीमा उपलब्ध नाही',
+        boundaryEast: document.getElementById('boundaryEast').value || 'पूर्व सीमा उपलब्ध नाही',
+        borrowers: []
+    };
+
+    const borrowerCount = parseInt(document.getElementById('borrowerCount').value);
+    for (let i = 1; i <= borrowerCount; i++) {
+        data.borrowers.push({
+            name: document.getElementById('name' + i).value,
+            dob: document.getElementById('dob' + i).value,
+            profession: document.getElementById('profession' + i).value,
+            pan: document.getElementById('pan' + i).value,
+            aadhaar: document.getElementById('aadhaar' + i).value,
+            mobile: document.getElementById('mobile' + i).value,
+            address: document.getElementById('address' + i).value
+        });
+    }
+
+    const content = generateMarathiDocumentContent(data);
+    generateAndDownloadDocx(content, 'Marathi');
+}
+
+function saveTemplate() {
+    // Logic to save the current form data as a template
+    updateStatus('Save Template function is not yet implemented. This would save your current form fields for later use.', 'info');
+}
+
+function fillBlankTemplate() {
+    clearAllFields();
+    updateStatus('A blank template has been loaded.', 'info');
+}
+
+function addCustomMaujePragane() {
+    const maujeSelect = document.getElementById('mauje');
+    const newMauje = prompt('Enter a new Mauje name:');
+    if (newMauje) {
+        const newOption = document.createElement('option');
+        newOption.value = newMauje.toUpperCase();
+        newOption.text = newMauje.toUpperCase();
+        maujeSelect.appendChild(newOption);
+        maujeSelect.value = newMauje.toUpperCase();
+    }
+    const praganeSelect = document.getElementById('pragane');
+    const new
